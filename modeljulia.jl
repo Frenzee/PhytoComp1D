@@ -43,12 +43,17 @@ struct Zooplankton
 
 end
 
-
+HOMEPATH="/home/michael/JuliaCoding/"
 function RunProgram()
-PhytoParams= CSV.read("/home/michael/JuliaCoding/PhytoSpeciesParams.csv")
-LakeParams=CSV.read("/home/michael/JuliaCoding/LakeParams.csv")
+PhytoParams= CSV.read("HOMEPATH/PhytoSpeciesParams.csv")
+LakeParams=CSV.read("HOMEPATH/LakeParams.csv")
 lights=zeros(Float64,MZ)
 calclights!(u,Iin,Kbg,ks,I,Dzs)
+end
+
+function IJth(i,j)
+   out=((i-1)*NS+j)
+   return(out)
 end
 
 #==
@@ -59,11 +64,17 @@ end
 6. GOTO 1.
 ==#
 N=100
-DZ=10.0
-S=zeros(N+2)
+DZ=10
+NS=10
+S=zeros(Float64,N+2)
 S[1]=0
 S[2:N+1]=[(i-1/2)*DZ for i in 2:N+1]
 S[N+2]=1000.0
+
+Js=zeros(Float64,1:((N+1)*NS))
+for i in 1:(N+1)*NS)
+
+Js[2:N]=
 
 
 
@@ -114,9 +125,6 @@ function calclights!(u::Array{Float64,2},Iin::Float64,Kbg::Float64,ks::Array{Flo
    Is
 end
 
-
-
-
 function calcadvections(ws,u,p)
    uz=u[i,j]
    uz_down= (j == MZ) ? ZERO : u[i,j+1];
@@ -138,21 +146,4 @@ function calcdiffusions(diffs::Array{Float64,1})
    DUp= (j>=2)? Ith(diffs,j-1) : ZERO
    hdiff=(j!=MZ) ? D*(uz_down-uz)/(Ith(DZs,j)) : ZERO
    hdiff_minus=(j==1) ? ZERO : DUp*(uz-uz_up)/(Ith(DZs,j))
-end
-
-function calcJs(J::Array{Float64,2})
- J[1]=0
- J[MZ+1]=0
- for i=2:NP
-    for i=2:MZ
-      if (ws<0 & i==MZ)
-         J[i]=ws*((uz_down+uz)*HALF)
-      elseif ((ws>0) & (i==2))
-         J[i]=ws*((uz_down+uz)*HALF)
-      elseif (ws<0)
-         J[i]=hadv[i-1]-hdiff[i-1]
-      elseif (ws>0)
-      end
-   end
-end
 end
