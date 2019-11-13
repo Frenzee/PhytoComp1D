@@ -13,7 +13,7 @@ const NEQ=NS*MZ
 const DZ=0.1
 const SIXTH=1.0/6.0
 const NOPARAMS=16
-print("Nlah Blah Blah")
+
 struct PhytoParam
    Pmax::Float64
    Ik::Float64
