@@ -51,11 +51,6 @@ lights=zeros(Float64,MZ)
 calclights!(u,Iin,Kbg,ks,I,Dzs)
 end
 
-function IJth(i,j)
-   out=((i-1)*NS+j)
-   return(out)
-end
-
 #==
 1. Calculate light field
 2. Calculate growth rates, diffusions and advections
@@ -71,10 +66,13 @@ S[1]=0
 S[2:N+1]=[(i-1/2)*DZ for i in 2:N+1]
 S[N+2]=1000.0
 
-Js=zeros(Float64,1:((N+1)*NS))
-for i in 1:(N+1)*NS)
+Js=zeros(Float64,N+1,NS)
+for i in 2:N
+   for j in 1:NS
+      Js[i,j]= (i==2)? v*(w[1,j]+w[2,j])/2.0-D*(w[2,j]-w[1,j])/DZ[i] : v*1.0/6.0(-w[i-1,j]+5*w[i,j]+2*w[i+1,j])
+end
+end
 
-Js[2:N]=
 
 
 
@@ -125,10 +123,10 @@ function calclights!(u::Array{Float64,2},Iin::Float64,Kbg::Float64,ks::Array{Flo
    Is
 end
 
-function calcadvections(ws,u,p)
+function calcadvections(ws,u,p,i,j)
    uz=u[i,j]
    uz_down= (j == MZ) ? ZERO : u[i,j+1];
-   uz_up=(j<=1) ? ZERO : u[i,j-1]);
+   uz_up=(j<=1) ? ZERO : u[i,j-1];
    ws=PhytoParams.ws[i]
    if ws<0
       uz_downtwo= (j >MZ-2) ? ZERO : u[i,j+2];
@@ -141,7 +139,7 @@ function calcadvections(ws,u,p)
    end
 end
 
-function calcdiffusions(diffs::Array{Float64,1})
+function calcdiffusions(diffs::Array{Float64,1},u,i,j)
    D=diffs[j];
    DUp= (j>=2)? Ith(diffs,j-1) : ZERO
    hdiff=(j!=MZ) ? D*(uz_down-uz)/(Ith(DZs,j)) : ZERO
