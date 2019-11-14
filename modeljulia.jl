@@ -74,42 +74,22 @@ end
 end
 
 
-<<<<<<< HEAD
 function calcgrowths!(u,lights,nutrients,temperatures,growthrates,p)
    for i=1:NS
       for j=1:MZ
          growthrates[j,i]=growthrate(lights[j],nutrients[j],temperatures[j],p)
-=======
-
-
-function phyto1d(du,u,p,t,J)
- for i=2:(MZ+1)
-    for j=1:NP
-        du[i,j-1]=growthrates[i,j-1]-(J[i,j]-J[i,j-1])/Dzs[j]
-    end
- end
-end
-
-function calcgrowths!(u,lights,nutrients,temperatures,growthrates,p)
-   for i=1:NS
-      for j=1:MZ
-         growthrates[j,i]=growthrate(lights[j],nutrients[j],temperatures[j],p[i])
->>>>>>> 3d43df01abf18742b49f456793610e3e60674275
       end
    end
 end
 
 function growthrate(light::Float64,nutrient::Float64,temperature::Float64,param::PhytoParam)
-   out=param.Pmax*(min(light/(light+param.Ik),nutrient/(nutrient+param.Nk)))
+   out=*(min(light/(light+param.Ik),nutrient/(nutrient+param.Nk)))
 end
 
-<<<<<<< HEAD
-function temperaturegrowth(A::Float64,a::Float64,B::Float64,b::Float64,temperature::Float64)
-   out=A*exp(a*temperature)-B*exp(b*temperature)
+function temperaturegrowth(A::Float64,a::Float64,B::Float64,b::Float64,C::Float64,temperature::Float64)
+   out=A*exp(a*temperature)-B*exp(b*temperature)-C
 end
 
-=======
->>>>>>> 3d43df01abf18742b49f456793610e3e60674275
 function calcweightedbiomass(u::Array{Float64,2},ks::Array{Float64,1})
    mz=length(u[1,:])
    np=length(ks)
