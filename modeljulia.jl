@@ -87,7 +87,7 @@ function growthrate(light::Float64,nutrient::Float64,temperature::Float64,param:
 end
 
 function temperaturegrowth(A::Float64,a::Float64,B::Float64,b::Float64,temperature::Float64)
-   out=A*exp(a*T)-B*exp(b*T)
+   out=A*exp(a*temperature)-B*exp(b*temperature)
 end
 
 function calcweightedbiomass(u::Array{Float64,2},ks::Array{Float64,1})
